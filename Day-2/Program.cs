@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 
 namespace Day_2
 {
@@ -21,7 +20,7 @@ namespace Day_2
             Console.WriteLine(Part2(directions));
         }
 
-        private static BigInteger Part2(List<Tuple<string, int>> directions)
+        private static int Part2(List<Tuple<string, int>> directions)
         {
             int horizontal = 0;
             int depth = 0;
