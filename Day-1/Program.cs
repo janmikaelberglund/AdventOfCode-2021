@@ -35,9 +35,7 @@ namespace Day_1
                 {
                     count++;
                 }
-
                 sum1 = sum2;
-
             }
 
 

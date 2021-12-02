@@ -28,12 +28,7 @@ namespace Day_2
 
             Dictionary<string, Action<int>> actions = new()
             {
-                { "forward", x => 
-                    { 
-                        horizontal += x;
-                        depth += x * aim;
-                    } 
-                },
+                { "forward", x => { horizontal += x; depth += x * aim; } },
                 { "up", x => aim -= x },
                 { "down", x => aim += x }
             };
