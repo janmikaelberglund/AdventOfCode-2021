@@ -7,7 +7,7 @@ namespace Day_8
 {
     internal class Program
     {
-        public static string path = Path.Combine(Environment.CurrentDirectory, "example.txt");
+        public static string path = Path.Combine(Environment.CurrentDirectory, "input.txt");
         static void Main(string[] args)
         {
             var rawInput = File.ReadAllLines(path);
@@ -22,7 +22,7 @@ namespace Day_8
 
 
             Console.WriteLine(part1(new(input)));
-            Console.WriteLine(part2(new(input)));
+            Console.WriteLine(part2(rawInput));
         }
         private static int part1(List<List<string>> input)
         {
@@ -42,36 +42,86 @@ namespace Day_8
             return count;
         }
 
-        private static int part2(List<List<string>> input)
+        private static int part2(string[] input)
         {
             List<int> result = new();
-            foreach (var list in input)
+            foreach (var line in input)
             {
-                result.Add(DecodeNumber(list));
+                result.Add(DecodeNumber(line));
             }
-
 
             return result.Sum(x => x);
         }
 
-        private static int DecodeNumber(List<string> list)
+        private static int DecodeNumber(string input)
         {
+            List<string> allNumbers = input.Split(" | ")[0].Split(' ').ToList();
+            List<string> list2 = input.Split(" | ")[1].Split(' ').ToList();
+
             string result = "";
 
-            string one = list.FirstOrDefault(x => x.Length == 2);
-            string seven = list.FirstOrDefault(x => x.Length == 3);
-            string four = list.FirstOrDefault(x => x.Length == 4);
-            string eight = list.FirstOrDefault(x => x.Length == 7);
-            string zero;
-            string nine;
-            if (four is not null)
+            var one = allNumbers.FirstOrDefault(x => x.Length == 2);
+            allNumbers.Remove(one);
+            var seven = allNumbers.FirstOrDefault(x => x.Length == 3);
+            allNumbers.Remove(seven);
+            var four = allNumbers.FirstOrDefault(x => x.Length == 4);
+            allNumbers.Remove(four);
+            var eight = allNumbers.FirstOrDefault(x => x.Length == 7);
+            allNumbers.Remove(eight);
+            var three = allNumbers.FirstOrDefault(x => x.Length == 5 && x.Count(y => one.Contains(y)) == 2);
+            allNumbers.Remove(three);
+            var two = allNumbers.FirstOrDefault(x => x.Length == 5 && x.Count(y => three.Contains(y)) == 4 && x.Count(y => four.Contains(y)) == 2);
+            allNumbers.Remove(two);
+            var five = allNumbers.FirstOrDefault(x => x.Length == 5);
+            allNumbers.Remove(five);
+            var nine = allNumbers.FirstOrDefault(x => x.Length == 6 && x.Count(y => three.Contains(y)) == 5);
+            allNumbers.Remove(nine);
+            var zero = allNumbers.FirstOrDefault(x => x.Length == 6 && x.Count(y => one.Contains(y)) == 2);
+            allNumbers.Remove(zero);
+            var six = allNumbers.FirstOrDefault(x => x.Length == 6);
+
+            for (int i = 0; i < list2.Count; i++)
             {
-                string zeroOrSix = list.FirstOrDefault(x => x.Length == 6 && x.Count(y => four.Contains(y)) == 3);
-                if (zeroOrSix is not null)
+                if (list2[i].Count(x => one.Contains(x)) == one.Length && list2[i].Length == one.Length)
                 {
-                    zero = zeroOrSix.Count(x => seven.Contains(x)) == 3 ? zeroOrSix : null;
+                    result += 1;
                 }
-                nine = list.FirstOrDefault(x => x.Length == 6 && x.Count(y => four.Contains(y)) == 4);
+                if (list2[i].Count(x => two.Contains(x)) == two.Length && list2[i].Length == two.Length)
+                {
+                    result += 2;
+                }
+                if (list2[i].Count(x => three.Contains(x)) == three.Length && list2[i].Length == three.Length)
+                {
+                    result += 3;
+                }
+                if (list2[i].Count(x => four.Contains(x)) == four.Length && list2[i].Length == four.Length)
+                {
+                    result += 4;
+                }
+                if (list2[i].Count(x => five.Contains(x)) == five.Length && list2[i].Length == five.Length)
+                {
+                    result += 5;
+                }
+                if (list2[i].Count(x => six.Contains(x)) == six.Length && list2[i].Length == six.Length)
+                {
+                    result += 6;
+                }
+                if (list2[i].Count(x => seven.Contains(x)) == seven.Length && list2[i].Length == seven.Length)
+                {
+                    result += 7;
+                }
+                if (list2[i].Count(x => eight.Contains(x)) == eight.Length && list2[i].Length == eight.Length)
+                {
+                    result += 8;
+                }
+                if (list2[i].Count(x => nine.Contains(x)) == nine.Length && list2[i].Length == nine.Length)
+                {
+                    result += 9;
+                }
+                if (list2[i].Count(x => zero.Contains(x)) == zero.Length && list2[i].Length == zero.Length)
+                {
+                    result += 0;
+                }
             }
 
             //Finish all conditions

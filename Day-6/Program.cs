@@ -8,7 +8,7 @@ namespace Day_6
 {
     internal class Program
     {
-        public static string path = Path.Combine(Environment.CurrentDirectory, "example.txt");
+        public static string path = Path.Combine(Environment.CurrentDirectory, "input.txt");
         static void Main(string[] args)
         {
             string[] inputRaw = File.ReadAllLines(path);
@@ -21,10 +21,10 @@ namespace Day_6
             var count = 0;
             foreach (var fish in inputList)
             {
-                bigint += part2(fish);
-                GC.Collect();
                 count++;
                 Console.WriteLine(count);
+                bigint += part2(fish);
+                GC.Collect();
             }
 
             Console.WriteLine(part1(new(inputList)));
@@ -54,50 +54,56 @@ namespace Day_6
 
         private static BigInteger part2(int input)
         {
-            List<List<int>> temp = new();
+            List<List<int>> splitList30 = new();
 
             for (int i = 0; i < 30; i++)
             {
-                temp.Add(new());
+                splitList30.Add(new());
             }
-            temp[0].Add(input);
+            splitList30[0].Add(input);
 
+            var redistribute = 0;
             for (int i = 256; i > 0; i--)
             {
-                for (int j = 0; j < temp.Count; j++)
+                int splitListCount = splitList30.Count;
+                List<int> countIntsInSplitList = new();
+                for (int l = 0; l < splitListCount; l++)
                 {
-                    int count = temp[j].Count;
-                    var split = 0;
-                    for (int k = 0; k < count; k++)
+                    countIntsInSplitList.Add(splitList30[l].Count);
+                }
+                for (int j = 0; j < splitListCount; j++)
+                {
+
+                    for (int k = 0; k < countIntsInSplitList[j]; k++)
                     {
-                        if (temp[j][k] == 0)
+                        if (splitList30[j][k] == 0)
                         {
-                            temp[split].Add(8);
-                            temp[j][k] = 6;
+                            splitList30[redistribute].Add(8);
+                            splitList30[j][k] = 6;
                         }
                         else
                         {
-                            temp[j][k] --;
+                            splitList30[j][k] --;
                         }
-                        if (split < 29)
+                        if (redistribute < 29)
                         {
-                            split++;
+                            redistribute++;
                         }
                         else
                         {
-                            split = 0;
+                            redistribute = 0;
                         }
                     }
                 }
             }
 
             BigInteger counter = 0;
-            for (int i = 0; i < temp.Count; i++)
+            for (int i = 0; i < splitList30.Count; i++)
             {
-                counter += temp[i].Count;
+                counter += splitList30[i].Count;
             }
 
-            temp = null;
+            splitList30 = new();
             
             return counter;
         }
