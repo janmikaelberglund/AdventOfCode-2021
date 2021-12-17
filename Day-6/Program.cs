@@ -9,8 +9,6 @@ namespace Day_6
 {
     internal class Program
     {
-        public static List<List<int>> splitList30 = new();
-
         public static string path = Path.Combine(Environment.CurrentDirectory, "example.txt");
         static void Main(string[] args)
         {
@@ -19,6 +17,7 @@ namespace Day_6
             var split = inputRaw[0].Split(',');
 
             List<int> inputList = new List<int>(Array.ConvertAll(split, int.Parse));
+            //List<int> inputList = new List<int>() { 1};
 
             BigInteger bigint = new();
             var count = 0;
@@ -35,7 +34,7 @@ namespace Day_6
         }
         private static int part1(List<int> input)
         {
-            for (int i = 80; i > 0; i--)
+            for (int i = 0; i < 80; i++)
             {
                 int count = input.Count;
                 for (int j = 0; j < count; j++)
@@ -57,66 +56,148 @@ namespace Day_6
 
         private static BigInteger part2(int input)
         {
-            int numberOfLists = 16;
+            List<List<int>> fishList = new();
+            int numberOfLists = 16; //Try 8 to so only one list per thread, thus only one method per thread runs
             for (int i = 0; i < numberOfLists; i++)
             {
-                splitList30.Add(new());
+                fishList.Add(new());
             }
-            splitList30[0].Add(input);
+            fishList[0].Add(input);
 
-            for (int i = 80; i > 0; i--)
+            int indexCounter = 0;
+            for (int i = 256; i > 0; i--)
             {
-                List<int> countIntsInSplitList = new();
+                List<int> numberOfFishInEachList = new();
                 for (int l = 0; l < numberOfLists; l++)
                 {
-                    countIntsInSplitList.Add(splitList30[l].Count);
+                    numberOfFishInEachList.Add(fishList[l].Count);
                 }
-                for (int j = 0; j < numberOfLists - 1; j++)
+
+                int index0,index1,index2,index3,index4,index5,index6,index7,index8,
+                    index9,index10,index11,index12,index13,index14,index15 = 0;
+                index0 = index1 = index2 = index3 = index4 = index5 = index6 = index7 = index8 =
+                    index9 = index10 = index11 = index12 = index13 = index14 = index15 = 0;
+                int fishToAdd = 0;
+                Parallel.For(0, numberOfLists, index =>
                 {
-                    //if (j % 2 != 0)
-                    //{
-                    //    continue;
-                    //}
-                    Task runLoop = Task.Run(() => AddFish(countIntsInSplitList, j));
-                    //AddFish(countIntsInSplitList, j);
-                    Task.WaitAll();
+                    var returnTuple = AddFish(new(fishList[index]), numberOfFishInEachList[index]);
+                    fishList[index] = returnTuple.Item1;
+                    switch (index)
+                    {
+                        case 0:
+                            index0 = returnTuple.Item2;
+                            break;
+                        case 1:
+                            index1 = returnTuple.Item2;
+                            break;
+                        case 2:
+                            index2 = returnTuple.Item2;
+                            break;
+                        case 3:
+                            index3 = returnTuple.Item2;
+                            break;
+                        case 4:
+                            index4 = returnTuple.Item2;
+                            break;
+                        case 5:
+                            index5 = returnTuple.Item2;
+                            break;
+                        case 6:
+                            index6 = returnTuple.Item2;
+                            break;
+                        case 7:
+                            index7 = returnTuple.Item2;
+                            break;
+                        case 8:
+                            index8 = returnTuple.Item2;
+                            break;
+                        case 9:
+                            index9 = returnTuple.Item2;
+                            break;
+                        case 10:
+                            index10 = returnTuple.Item2;
+                            break;
+                        case 11:
+                            index11 = returnTuple.Item2;
+                            break;
+                        case 12:
+                            index12 = returnTuple.Item2;
+                            break;
+                        case 13:
+                            index13 = returnTuple.Item2;
+                            break;
+                        case 14:
+                            index14 = returnTuple.Item2;
+                            break;
+                        case 15:
+                            index15 = returnTuple.Item2;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                fishToAdd = index0 + index1 + index2 + index3 + index4 + index5 + index6 + index7 + index8 + index9 + index10 + index11 + index12 + index13 + index14 + index15;
+
+                int addCount = 0;
+                bool addFish = true;
+                while (addFish)
+                {
+                    if (addCount < fishToAdd)
+                    {
+                        if (indexCounter < numberOfLists - 1)
+                        {
+                            indexCounter++;
+                        }
+                        else
+                        {
+                            indexCounter = 0;
+                        }
+                        fishList[indexCounter].Add(8);
+                    }
+                    else
+                    {
+                        addFish = false;
+                    }
+                    addCount++;
                 }
+
+
+                //for (int j = 0; j < numberOfLists - 1; j++)
+                //{
+
+                //    AddFish(numberOfFishInEachList, j);
+                //}
             }
 
             BigInteger counter = 0;
-            for (int i = 0; i < splitList30.Count; i++)
+            for (int i = 0; i < fishList.Count; i++)
             {
-                counter += splitList30[i].Count;
+                counter += fishList[i].Count;
             }
 
-            splitList30 = new();
+            fishList = new();
             
             return counter;
         }
 
-        private static void AddFish(List<int> countIntsInSplitList, int j)
+        private static Tuple<List<int>, int> AddFish(List<int> partedFishList, int numberOfFish)
         {
-            var redistribute = 0;
-            for (int k = 0; k < countIntsInSplitList[j]; k++)
+            var fishToAdd = 0;
+            for (int k = 0; k < numberOfFish; k++)
             {
-                if (splitList30[j][k] == 0)
+                if (partedFishList[k] == 0)
                 {
-                    splitList30[redistribute].Add(8);
-                    splitList30[j][k] = 6;
+                    partedFishList[k] = 6;
+                    fishToAdd++;
                 }
                 else
                 {
-                    splitList30[j][k]--;
-                }
-                if (redistribute < j + 1)
-                {
-                    redistribute++;
-                }
-                else
-                {
-                    redistribute = j;
+                    partedFishList[k]--;
                 }
             }
+
+            return new Tuple<List<int>, int>(partedFishList, fishToAdd);
         }
     }
 }
