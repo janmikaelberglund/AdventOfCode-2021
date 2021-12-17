@@ -21,9 +21,7 @@ namespace Day_9
 
             List<List<int[]>> part2List = new();
 
-            foreach (var outerList in part2List)
-            {
-                foreach (var innerList in outerList)
+                foreach (var innerList in input)
                 {
                     List<int[]> part2inner = new();
                     foreach (var number in innerList)
@@ -39,7 +37,6 @@ namespace Day_9
                     }
                     part2List.Add(part2inner);
                 }
-            }
 
 
             Console.WriteLine(part1(new(input)));
@@ -92,26 +89,52 @@ namespace Day_9
 
             return input;
         }
+        private static List<List<int[]>> FormatInput(List<List<int[]>> input, int[] border)
+        {
+            List<int[]> temp = new();
+            input.Insert(0, temp);
+            input.Insert(input.Count, temp);
+
+            var inputCount = input.Count;
+            for (int i = 0; i < inputCount -1; i++)
+            {
+                input.First().Add(border);
+                input.Last().Add(border);
+            }
+
+            for (int i = 1; i < inputCount -1; i++)
+            {
+                input[i].Insert(0, border);
+                input[i].Insert(input[i].Count, border);
+            }
+
+            return input;
+        }
 
         private static int part2(List<List<int[]>> heightMap)
         {
-            List<List<int>> basins = FindAllBasins(heightMap).OrderBy(x => x.Count()).ToList();
+            List<List<int[]>> basins = FindAllBasins(heightMap).OrderBy(x => x.Count()).ToList();
 
 
             return basins[0].Count() * basins[1].Count() * basins[2].Count();
         }
 
-        private static List<List<int>> FindAllBasins(List<List<int[]>> heightMap)
+        private static List<List<int[]>> FindAllBasins(List<List<int[]>> heightMap)
         {
+            int[] border = new int[] { 9, 1};
+            heightMap = FormatInput(heightMap, border);
             List<List<int[]>> results = new();
             var iCount = heightMap.Count;
             var jCount = heightMap[0].Count;
             
-            for (int i = 0;i < iCount;i++)
+            for (int i = 0; i < iCount;i++)
             {
                 for (int j = 0; j < jCount; j++)
                 {
+                    //if (heightMap[])
+                    //{
 
+                    //}
                 }
             }
 
