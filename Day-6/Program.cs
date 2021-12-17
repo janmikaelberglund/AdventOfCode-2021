@@ -17,7 +17,7 @@ namespace Day_6
             var split = inputRaw[0].Split(',');
 
             List<int> inputList = new List<int>(Array.ConvertAll(split, int.Parse));
-            //List<int> inputList = new List<int>() { 1};
+            //List<int> inputList = new List<int>() { 1}; // Use to try if 8 lists can hold one fish
 
             BigInteger bigint = new();
             var count = 0;
