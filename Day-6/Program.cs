@@ -16,8 +16,8 @@ namespace Day_6
 
             var split = inputRaw[0].Split(',');
 
-            List<int> inputList = new List<int>(Array.ConvertAll(split, int.Parse));
-            //List<int> inputList = new List<int>() { 1}; // Use to try if 8 lists can hold one fish
+            //List<int> inputList = new List<int>(Array.ConvertAll(split, int.Parse));
+            List<int> inputList = new List<int>() { 1 }; // Use to try if 8 lists can hold one fish
 
             BigInteger bigint = new();
             var count = 0;
@@ -57,7 +57,7 @@ namespace Day_6
         private static BigInteger part2(int input)
         {
             List<List<int>> fishList = new();
-            int numberOfLists = 16; //Try 8 to so only one list per thread, thus only one method per thread runs
+            int numberOfLists = 8; //Try 8 to so only one list per thread, thus only one method per thread runs
             for (int i = 0; i < numberOfLists; i++)
             {
                 fishList.Add(new());
